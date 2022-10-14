@@ -2,7 +2,9 @@ package com.example.springbatch.job;
 
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * 编写第一个任务
@@ -39,7 +43,11 @@ public class FirstJobDemo {
     private Step step() {
         return stepBuilderFactory.get("step")
                 .tasklet((contribution, chunkContext) -> {
-                    System.out.println("执行步骤....");
+                    StepExecution stepExecution = chunkContext.getStepContext().getStepExecution();
+                    Map<String, JobParameter> parameters = stepExecution.getJobParameters().getParameters();
+                    System.out.println(parameters.get("message").getValue());
+                    System.out.println(parameters.get("message").getValue());
+                    System.out.println("执行步骤.1...");
                     return RepeatStatus.FINISHED;
                 }).build();
     }
