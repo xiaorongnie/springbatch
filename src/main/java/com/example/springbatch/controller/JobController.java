@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * @Author Eason
  * @Date 2022-10-14 17:00
@@ -43,14 +45,17 @@ public class JobController {
      * {@link com.example.springbatch.config.JobConfigure#processor(JobRegistry, ApplicationContext)}  }
      *
      * @see com.example.springbatch.config.JobConfigure#processor(JobRegistry, ApplicationContext)
+     * <p>
+     * http://192.168.0.23:8080/job/operator/firstJob
+     * http://192.168.0.23:8080/job/operator/readCSVFilesJob
      */
     @Autowired
     private JobOperator jobOperator;
 
-    @GetMapping("operator/{message}")
-    public String operator(@PathVariable String message) throws Exception {
+    @GetMapping("operator/{job}")
+    public String operator(@PathVariable String job) throws Exception {
         // 传递任务名称，参数使用 kv方式
-        jobOperator.start("firstJob", "message=" + message);
+        jobOperator.start(job, "message=" + new Date());
         return "success";
     }
 }
